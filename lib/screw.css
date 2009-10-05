@@ -1,15 +1,35 @@
-html {
-  padding: 0.5em;
-  font-family: Georgia, serif;
-  background: #EDEBD5;
+/* 
+ * http://meyerweb.com/eric/tools/css/reset/
+ * v1.0 | 20080212 
+ */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0; padding: 0;
+  border: 0; outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+body { line-height: 1; }
+ol, ul { list-style: none; }
+:focus {  outline: 0; }
+
+body {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
+  font-size: 13px;
+  background-color: #F4F2E4;
 }
 
   li {
     list-style-type: none;
-  }
-
-  .focused {
-    background-color: #F4F2E4;
   }
 
     .focused * {
@@ -20,29 +40,19 @@ html {
     opacity: 0.4;
   }
 
-  .describes {
-    padding-left: 0;
+  .status {
+    padding: 10px;
   }
 
     .describes h1 {
       font-size: 1.1em;
       color: #877C21;
-      line-height: 1.8em;
-      margin: 0pt 0pt 0.6em;
-      border-bottom: 1px solid transparent;
+      margin-bottom: 5px;
     }
 
-      .describes h1:hover {
-        cursor: pointer;
-        color: #000;
-        background-color: #F4F2E4;
-        border-bottom: 1px solid #9A8E51;
-      }
-
     .describes .describe {
-      margin-left: 0.6em;
-      padding-left: 0.6em;
-      border: 1px dashed #999;
+      margin-left: 10px;
+      margin-bottom: 10px;
     }
 
       .describes .describe .its {}
@@ -50,6 +60,7 @@ html {
         .describes .describe .its .it {
           list-style-type: lower-roman;
           list-style-position: outside;
+          margin-left: 20px;
         }
 
           .describes .describe .its .it h2 {
@@ -62,7 +73,7 @@ html {
             margin: 0 0 0.5em;
             border-bottom: 1px solid transparent;
           }
-          
+
           .describes .describe .its .it.enqueued h2 {
             background-color: #CC6600;
             color: white !important;
@@ -80,11 +91,7 @@ html {
 
           .describes .describe .its .it.failed p {
             margin-left: 1em;
+            margin-bottom: 1em;
             color: #993300;
           }
-          
-          .describes .describe .its .it h2:hover {
-            cursor: pointer;
-            color: #000 !important;
-            border-bottom: 1px solid #9A8E51;
-          }
+
