@@ -8,9 +8,10 @@
 Smok = {}
 
 Smok.Expectation = function(object, name){
-    this.name= name || 'John Doe';
-    this.object= object;
-    this.call_count= 0;
+    this.name = name || 'John Doe';
+    this.object = object;
+    this.call_count = this.expected_count = 0;
+    this.expected_this = object;
 };
 
 Smok.Expectation.prototype = {
@@ -19,7 +20,7 @@ Smok.Expectation.prototype = {
         expectation.function_name = function_name;
         expectation.original_function = expectation.object[function_name];
         expectation.object[function_name] = function(){
-            return Smok.Expectation.callback.call(expectation, this, arguments);
+            return Smok.Expectation.callback.call(expectation, this, Array.slice.call(arguments));
         };
         expectation.expected_count = 1;
         return expectation;
@@ -36,7 +37,7 @@ Smok.Expectation.prototype = {
     },
 
     with_args: function(){
-        this.expected_args = arguments;
+        this.expected_args = Array.slice.call(arguments);
         return this;
     },
 
@@ -55,7 +56,8 @@ Smok.Expectation.prototype = {
 }
 
 Smok.Expectation.callback = function(object, args){
-    if(Smok.compare(this.expected_this, object) && Smok.compare(this.expected_args, args)){
+    if(Smok.compare(this.expected_this, object) &&
+        (this.expected_args === undefined || Smok.compare(this.expected_args, args))){
       this.call_count++;
     }
     return this.return_value;

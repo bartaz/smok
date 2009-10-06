@@ -19,24 +19,33 @@ describe("Smok", function() {
     describe("while creating new expectation", function(){
 
       it("should create new expectation for given object", function(){
-        var expectation = new Smok.Expectation(dummy);
         expect(expectation).to_not(be_undefined);
         expect(expectation.object).to(equal, dummy);
       });
 
       it("should create expectation with given name", function(){
-        var expectation = new Smok.Expectation(dummy, dummy.name);
         expect(expectation.name).to(equal, dummy.name);
       });
 
       it("should create expectation with default name if not given", function(){
-        var expectation = new Smok.Expectation(dummy);
+        expectation = new Smok.Expectation(dummy);
         expect(expectation.name).to(equal, 'John Doe');
       });
 
       it("should have call counter reset to 0", function(){
-        var expectation = new Smok.Expectation(dummy);
         expect(expectation.call_count).to(equal, 0);
+      });
+
+      it("should have expected counter set to 0", function(){
+        expect(expectation.expected_count).to(equal, 0);
+      });
+
+      it("should have expected this set to given object", function(){
+        expect(expectation.expected_this).to(equal, dummy);
+      });
+
+      it("should not fail if calls are not expected", function(){
+        expect(expectation.check()).to(be_true);
       });
 
     });
@@ -109,6 +118,7 @@ describe("Smok", function() {
           expect(mock.callback_this).to(equal, expectation);
           expect(mock.object_arg).to(equal, dummy);
           expect(mock.args_arg).to(equal, ['first argument', 'second argument']);
+          expect(mock.args_arg instanceof Array).to(be_true);
         });
 
       });
@@ -151,6 +161,7 @@ describe("Smok", function() {
         it("should store expected arguments", function(){
           expectation.should_receive('foo').with_args('first argument', 'second argument');
           expect(expectation.expected_args).to(equal, ['first argument', 'second argument']);
+          expect(expectation.expected_args instanceof Array).to(be_true);
         });
 
       });
@@ -175,9 +186,9 @@ describe("Smok", function() {
 
       it("should increment expectation's call counter", function(){
         expect(expectation.call_count).to(equal, 0);
-        Smok.Expectation.callback.call(expectation);
+        Smok.Expectation.callback.call(expectation, dummy);
         expect(expectation.call_count).to(equal, 1);
-        Smok.Expectation.callback.call(expectation);
+        Smok.Expectation.callback.call(expectation, dummy);
         expect(expectation.call_count).to(equal, 2);
       });
 
@@ -200,9 +211,9 @@ describe("Smok", function() {
       it("should only count calls with proper arguments if expected arguments are set", function(){
         expect(expectation.call_count).to(equal, 0);
         expectation.expected_args = ['first argument', 'second argument'];
-        Smok.Expectation.callback.call(expectation);
+        Smok.Expectation.callback.call(expectation, dummy);
         expect(expectation.call_count).to(equal, 0);
-        Smok.Expectation.callback.call(expectation, undefined, ['first argument', 'second argument']);
+        Smok.Expectation.callback.call(expectation, dummy, ['first argument', 'second argument']);
         expect(expectation.call_count).to(equal, 1);
       });
 
