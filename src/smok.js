@@ -20,7 +20,7 @@ Smok.Expectation.prototype = {
         expectation.function_name = function_name;
         expectation.original_function = expectation.object[function_name];
         expectation.object[function_name] = function(){
-            return Smok.Expectation.callback.call(expectation, this, Array.slice.call(arguments));
+            return Smok.Expectation.callback.call(expectation, this, Array.prototype.slice.call(arguments));
         };
         expectation.expected_count = 1;
         return expectation;
@@ -37,7 +37,7 @@ Smok.Expectation.prototype = {
     },
 
     with_args: function(){
-        this.expected_args = Array.slice.call(arguments);
+        this.expected_args = Array.prototype.slice.call(arguments);
         return this;
     },
 
