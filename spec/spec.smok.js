@@ -49,17 +49,11 @@ describe 'Smok'
 
         before_each
           dummy_foo = dummy.foo
-          // 'should_receive' needs to be called in so strange way
-          // as 'should_receive' is JSpec feature also
-          expectation['should_receive']('foo')
-        end
-
-        after_each
-          dummy.foo = dummy_foo
+          expectation.expects('foo')
         end
 
         it 'should return self expectation'
-          expectation['should_receive']('foo').should.eql expectation
+          expectation.expects('foo').should.eql expectation
         end
 
         it 'should store name of expected function'
@@ -92,11 +86,11 @@ describe 'Smok'
       describe 'and setting expected multiplicity'
 
         it 'should return self expectation'
-          expectation['should_receive']('foo').exactly(2,'times').should.eql expectation
+          expectation.expects('foo').exactly(2,'times').should.eql expectation
         end
 
         it 'should store expected count value'
-          expectation['should_receive']('foo').exactly(2,'times')
+          expectation.expects('foo').exactly(2,'times')
           expectation.expected_count.should.eql 2
         end
 
@@ -105,11 +99,11 @@ describe 'Smok'
       describe 'and setting expected this value'
 
         it 'should return self expectation'
-          expectation['should_receive']('foo').on('expected this').should.eql expectation
+          expectation.expects('foo').on('expected this').should.eql expectation
         end
 
         it 'should store expected this value'
-          expectation['should_receive']('foo').on('expected this')
+          expectation.expects('foo').on('expected this')
           expectation.expected_this.should.eql 'expected this'
         end
 
@@ -118,11 +112,11 @@ describe 'Smok'
       describe "and setting expected arguments"
 
         it 'should return self expectation'
-          expectation['should_receive']('foo').with_args('first argument').should.eql expectation          
+          expectation.expects('foo').with_args('first argument').should.eql expectation
         });
 
         it 'should store expected arguments'
-          expectation['should_receive']('foo').with_args('first argument', 'second argument')
+          expectation.expects('foo').with_args('first argument', 'second argument')
           expectation.expected_args.should.eql ['first argument', 'second argument']
           expectation.expected_args.should.be_an_instance_of Array
         end
@@ -132,11 +126,11 @@ describe 'Smok'
       describe 'and setting expected return value'
 
         it 'should return self expectation'
-          expectation['should_receive']('foo').and_return('return value').should.eql expectation
+          expectation.expects('foo').and_return('return value').should.eql expectation
         end
 
         it 'should store return value'
-          expectation['should_receive']('foo').and_return('return value')
+          expectation.expects('foo').and_return('return value')
           expectation.return_value.should.equal 'return value'
         end
 
@@ -199,18 +193,11 @@ describe 'Smok'
 
     describe 'while reseting expectation'
 
-      before_each
-        dummy_foo = dummy.foo
-      end
-
-      after_each
-        dummy.foo = dummy_foo
-      end
-
       it "should revert original function"
-        expectation['should_receive']('foo')
+        original_dummy_foo = dummy.foo
+        expectation.expects('foo')
         expectation.reset();
-        dummy.foo.should.be dummy_foo
+        dummy.foo.should.be original_dummy_foo
       end
 
     end
