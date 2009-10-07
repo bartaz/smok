@@ -5,5 +5,5 @@ load('lib/smok.js')
 
 JSpec
 .exec('spec/spec.smok.js')
-.run({ formatter: JSpec.formatters.TerminalSpec })
+.run({ formatter: JSpec.formatters.Terminal })
 .report()
