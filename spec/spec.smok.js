@@ -126,11 +126,11 @@ describe 'Smok'
       describe 'and setting expected return value'
 
         it 'should return self expectation'
-          expectation.expects('foo').and_return('return value').should.eql expectation
+          expectation.expects('foo').returns('return value').should.eql expectation
         end
 
         it 'should store return value'
-          expectation.expects('foo').and_return('return value')
+          expectation.expects('foo').returns('return value')
           expectation.return_value.should.equal 'return value'
         end
 
@@ -208,19 +208,21 @@ describe 'Smok'
     Smok.expectations.should.be_empty
   end
 
-  describe 'Mock'
+  describe 'while mocking'
 
     after_each
       Smok.expectations = []
     end
 
     it "should create and return expectation"
+      original = Smok.Expectation
       Smok.should.receive('Expectation', 'once').with_args(dummy, dummy.name)
-      Smok.Mock(dummy, dummy.name).should.be_an_instance_of Smok.Expectation
+      Smok(dummy, dummy.name).should.be_an_instance_of Smok.Expectation
+      Smok.Expectation = original
     end
 
     it "should add expectation to the expectations list"
-      Smok.Mock()
+      Smok()
       Smok.expectations.should.have_length 1
       Smok.expectations[0].should.be_an_instance_of Smok.Expectation
     end
@@ -335,6 +337,31 @@ describe 'Smok'
         Smok.compare(expected, actual).should.be true
       end
 
+    end
+
+  end
+
+  describe 'while extending jQuery'
+
+    before_each
+      jQuery = {}
+      jQuery.fn = {}
+      Smok.addons.jQuery()
+    end
+
+    it "should define 'expects' function for jQuery elements"
+      jQuery.fn.expects.should.not.be_undefined
+    end
+
+    it "should return expectation"
+      expectation = jQuery.fn.expects.call(dummy, "foo")
+      expectation.should.be_an_instance_of Smok.Expectation
+      expectation.object.should.equal jQuery.fn
+      expectation.name.should.equal "jQuery"
+      expectation.function_name.should.equal "foo"
+      expectation.expected_this.should.equal dummy
+      expectation.expected_count.should.equal 1
+      expectation.return_value.should.equal dummy
     end
 
   end

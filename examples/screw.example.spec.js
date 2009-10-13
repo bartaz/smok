@@ -8,7 +8,7 @@ describe("Examples", function() {
     // this is some dummy object we will mock in these examples
     dummy = { foo: function(){ return 'bar' } };
     // this is a mocked object we will use in tests
-    mock = Smok.Mock(dummy);
+    mock = Smok(dummy);
   })
 
   after(function(){
@@ -33,7 +33,7 @@ describe("Examples", function() {
 
   it("shows how to give return value to mocked function call", function(){
     // expect 'foo' call and make it return 'hello!'
-    mock.expects('foo').and_return('hello!');
+    mock.expects('foo').returns('hello!');
     // calling dummy.foo() will return mocked value
     expect(dummy.foo()).to(equal, 'hello!');
     // after reset old function is back on place
@@ -85,10 +85,10 @@ describe("Examples", function() {
 
       // create a mock of jQuery and expect body to recieve add class with some args
       // and return same body element (to make jQuery chain work)
-      Smok.Mock($.fn).on(body).expects('addClass').with_args("new").and_return(body);
+      Smok($.fn).on(body).expects('addClass').with_args("new").returns(body);
       // we can than expect other calls on same or other elements
-      Smok.Mock($.fn).on(body).expects('removeClass').with_args("old").and_return(body);
-      Smok.Mock($.fn).on(div).expects('hide').and_return(div);
+      Smok($.fn).on(body).expects('removeClass').with_args("old").returns(body);
+      Smok($.fn).on(div).expects('hide').returns(div);
 
       // and this is the chain that fulfills the expectations
       $('body').addClass("new").removeClass("old").find("#dummy").hide();
@@ -97,12 +97,8 @@ describe("Examples", function() {
     });
 
     it("shows how to simplify mocking jQuery with expectation plugin", function(){
-      // let's create a plugin that will create a mock for given jQuery object
-      // and simplify the code of jQuery expectations
-      $.fn.expects = function(name){
-        return Smok.Mock($.fn).expects(name).on(this).and_return(this);
-      }
-      // and rewrite previous example in a lot more readable way
+      // let's rewrite previous example in a lot more readable way
+      // using Smok jQuery add-on
       body.expects('addClass').with_args("new");
       body.expects('removeClass').with_args("old");
       div.expects('hide');
