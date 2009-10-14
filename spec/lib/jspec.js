@@ -1618,11 +1618,13 @@
 
     exec : function(file) {
       if (any(hook('executing', file), haveStopped)) return this
+      /* disabled to make jQuery work with rhino
       if ('node' in main)
         this.load(file, function(contents){
           eval('with (JSpec){ ' + JSpec.preprocess(contents) + ' }')
         })
       else
+      */
         eval('with (JSpec){' + this.preprocess(this.load(file)) + '}')
       return this
     }

@@ -76,7 +76,7 @@ describe("Examples", function() {
 
     before(function(){
       body = $('body');
-      div = body.find("#dummy");
+      div = $("#dummy");
     });
 
     it("shows how mock calls to jQuery with expectations of 'this'", function(){

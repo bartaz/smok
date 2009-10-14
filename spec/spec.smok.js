@@ -292,7 +292,12 @@ describe 'Smok'
       Smok.compare(42, 40 + 2).should.be true
     end
 
-    describe "while comparing arrays"
+    it "should return false if one of values is undefined and other is not"
+      Smok.compare(undefined, 'defined').should.be false
+      Smok.compare('defined', undefined).should.be false
+    end
+
+    describe "that are arrays"
 
       it "should return false if arrays have different lengths"
         a = [1, 2, 3, 4], b = [1, 2, 3]
@@ -311,7 +316,31 @@ describe 'Smok'
 
     end
 
-    describe "while comparing objects"
+    describe "that are jQuery objects"
+
+      it "should return false if objects contain different number of elements"
+        list = elements("<ul><li>First</li><li>Second</li></ul>")
+        items = list.find("li")
+        child = list.find("li:first-child")
+        Smok.compare(items, child).should.be false
+      end
+
+      it "should return false if objects contain different elements"
+        list = elements("<ul><li>First</li><li>Second</li></ul>")
+        child = list.find("li:first-child")
+        Smok.compare(list, child).should.be false
+      end
+
+      it "should return true if objects contain the same elements"
+        list = elements("<ul><li>First</li><li>Second</li></ul>")
+        items = list.find("li")
+        children = list.children()
+        Smok.compare(items, children).should.be true
+      end
+
+    end
+
+    describe "that are objects"
 
       it "should return false if expected value doesn't have all properties from actual value"
         expected = { a: 'A', b: 'B', c: 'C' },
