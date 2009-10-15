@@ -33,10 +33,6 @@ describe 'Smok'
         expectation.expected_count.should.be 0
       end
 
-      it 'should have expected this set to given object'
-        expectation.expected_this.should.eql dummy
-      end
-
       it 'should not fail if calls are not expected'
         expectation.check().should.be true
       end
