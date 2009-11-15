@@ -21,6 +21,8 @@ describe("Examples", function() {
     mock.expects('foo');
     // mock expectations are not fulfilled yet
     expect(Smok.check()).to(be_false);
+    // you can get failure message
+    expect(Smok.check.failure).to(equal, "Expected foo() to be called exactly 1 times");
     // let's call mocked function
     dummy.foo();
     // mock expectations are now fulfilled

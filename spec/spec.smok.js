@@ -20,11 +20,6 @@ describe 'Smok'
         expectation.name.should.eql dummy.name
       end
 
-      it 'should create expectation with default name if not given'
-        expectation = new Smok.Expectation(dummy)
-        expectation.name.should.eql 'John Doe'
-      end
-
       it 'should have call counter reset to 0'
         expectation.call_count.should.be 0
       end
@@ -198,6 +193,26 @@ describe 'Smok'
 
     end
 
+    describe 'while describing expectation'
+
+      it "should tell what object expects function calls"
+        expectation.message().should.include dummy.name
+      end
+
+      it "should tell what function was expected to be called"
+        expectation.expects('foo')
+        expectation.message().should.include "foo"
+      end
+
+      it "should tell how many times function was expected to be called"
+        expectation.expects('foo')
+        expectation.message().should.include "1"
+        expectation.exactly(2, 'times')
+        expectation.message().should.include "2"
+      end
+
+    end
+
   end
 
   it 'should have empty expectations list by default'
@@ -246,8 +261,10 @@ describe 'Smok'
     end
 
     it "should return false if any of expectations failed"
-      Smok.expectations[5] = { check: function(){ counter++; return false } }
+      Smok.expectations[5] = { check: function(){ counter++; return false },
+                               message: function(){ return "failure message" } }
       Smok.check().should.be false
+      Smok.check.failure.should.eql "failure message"
       counter.should.equal 6
     end
 
